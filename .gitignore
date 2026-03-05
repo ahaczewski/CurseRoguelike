@@ -1,0 +1,44 @@
+# Ignore Visual Studio solution files.
+*.sln
+
+# Ignore all Visual Studio temp and/or user-specific files
+.vs/
+.vsconfig
+*.suo
+*.opensdf
+*.sdf
+*.csproj.user
+*.csproj.*.cache
+*.DotSettings.user
+
+# Ignore JetBrain's IDE folders
+.idea/
+.gradle/
+
+# Ignore VSCode project files
+.vscode/
+*.code-workspace
+
+# Explicitly KEEP: Config for VSCode
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+
+# Ignore files added by Finder on Mac
+.DS_Store
+
+# Ignore local binaries and temporary files
+Binaries/
+Saved/
+Intermediate/
+DerivedDataCache/
+
+# Ignore Perforce-related files
+/.p4config.txt
+.p4ignore.txt
+
+# Do NOT store Developer content (this goes to Perforce ONLY)
+/Content/Developers/
+
+# Ignore the ignore
+.ignore

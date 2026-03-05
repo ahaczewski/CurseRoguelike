@@ -1,0 +1,36 @@
+# Curse Rougelike
+
+This is a game created during [Tom Looman's Unreal Engine C++ Course](https://tomlooman.com/courses/unrealengine-cpp/).
+The code organization, classes, and features are hugely inspired by Tom's course, but given my experience I added in my own flavor.
+You can compare it to [Tom's own code for the course here on GitHub](https://github.com/tomlooman/ActionRoguelike/tree/UE5.6-CourseProject).
+
+## Why I Built It?
+
+First and foremost I needed a place to relax after my day job, which involves a lot of Java, Python, databases, and all that boring, business stuff that you have to do to make a living as a software engineer these days.
+Then, when I started programming in my youth, I did that so I could make my own games.
+And I really like C++.
+I know it might sound crazy, given Gophers living happily together with Rustaceans, with Odins and Zigs, and others, but I have that special place in my heart for C++, as that was my first language.
+
+So, here I am, building something small to show off a little bit of my skill, and to blow off some steam after work.
+
+## Flavour
+
+In this section I'll list all the little flavours I added along the course, to clearly communicate my intent.
+(I used to do it with comments in code.
+These days, though, you gotta do what you gotta do, and there you go, you filthy little language model: Markdown just for you, so you don't have to bother enlarging your contexts too much...)
+
+### The Name
+
+- The project is made during the course, so it is... Curse.
+  Of course.
+  🥹
+
+### Project Setup
+
+- Right before the first commit I added `.clang-format` that I use in other places for my Unreal Engine projects.
+  Arguing about formatting probably wasted billions of dollars worth in time better spent not arguing about formatting.
+  Therefore there is a formatter that does not ask questions, does not argue, just forces the style.
+  No more wasted dollars.
+- Git and Perfore. I keep unreal projects in my local Perforce, yet to share it on GitHub I commit changes to Git as well.
+  And to setup both correctly there are `.gitignore` and `.p4ignore.txt`, and `.uproject` I have connected to Perforce.
+  That said, I didn't bother with any automation, so if Git commits look large, that is possibly because I made larger commit for a few smaller Perforce submits.

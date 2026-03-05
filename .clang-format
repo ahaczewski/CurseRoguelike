@@ -1,0 +1,112 @@
+StatementMacros: ['UPROPERTY', 'UFUNCTION', 'UCLASS', 'USTRUCT', 'UENUM', 'UINTERFACE', 'GENERATED_BODY', 'GENERATED_UCLASS_BODY', 'GENERATED_USTRUCT_BODY', 'gmc_ck', 'gmc_ckne', 'gmc_ckc', 'FLog', 'CFLog', 'GMC_[A-Z_]+']
+MacroBlockBegin: "^BEGIN_[A-Z]+_PARAMETER_STRUCT$"
+MacroBlockEnd: "^END_[A-Z]+_PARAMETER_STRUCT$"
+IfMacros: ["LL_IF_DBG", "LL_IF_WRN", "LL_IF_ERR"]
+Macros:
+- ENQUEUE_RENDER_COMMAND(Type)=FRenderCommandPipe::Enqueue
+
+Language: Cpp
+Standard: c++20
+BasedOnStyle: LLVM
+
+AccessModifierOffset: -4
+AlignAfterOpenBracket: AlwaysBreak #Align
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlines: Left
+AlignOperands: DontAlign
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLambdasOnASingleLine: Inline
+AllowShortLoopsOnASingleLine: true
+BinPackArguments: false
+BinPackParameters: OnePerLine
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterExternBlock: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: true
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: true
+BreakAfterAttributes: Leave
+BreakAfterReturnType: ExceptShortType
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: true
+BreakBinaryOperations: RespectPrecedence
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: AfterColon
+BreakStringLiterals: false
+BreakTemplateDeclarations: Yes
+ColumnLimit: 140
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: true
+EmptyLineBeforeAccessModifier: LogicalBlock
+FixNamespaceComments: true
+IndentCaseBlocks: true
+IndentCaseLabels: false
+IndentPPDirectives: BeforeHash
+IndentWidth: 4
+IndentWrappedFunctionNames: false
+InsertTrailingCommas: Wrapped
+LambdaBodyIndentation: Signature # OuterScope
+KeepEmptyLines:
+  AtEndOfFile: true
+  AtStartOfBlock: false
+  AtStartOfFile: false
+# DEPRECATED in v18
+# KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: Inner
+PackConstructorInitializers: CurrentLine
+PointerAlignment: Left
+QualifierAlignment: Left
+ReferenceAlignment: Left
+ReflowComments: false
+# SeparateDefinitionBlocks: Always
+ShortNamespaceLines: 10
+SpaceBeforeCaseColon: false
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatementsExceptControlMacros
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 2
+SpacesInParens: Never
+# SortUsingDeclarationsOptions: LexicographicNumeric
+TabWidth: 4
+UseTab: Always
+PenaltyBreakBeforeFirstCallParameter: 10
+PenaltyBreakOpenParenthesis: 10
+PenaltyExcessCharacter: 3
+
+SortIncludes: CaseInsensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '^"Core[[:alnum:].]+\.h"$'
+    Priority:        1
+  - Regex:           '^"CurseRoguelike/'
+    Priority:        3
+  - Regex:           '\.generated\.h"$|UE_INLINE_GENERATED_CPP_BY_NAME'
+    Priority:        999
+  - Regex:           '.*'
+    Priority:        2
