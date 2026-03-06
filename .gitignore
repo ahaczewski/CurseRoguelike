@@ -42,3 +42,6 @@ DerivedDataCache/
 
 # Ignore the ignore
 .ignore
+
+# Just ignore them...
+.ai/

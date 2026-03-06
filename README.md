@@ -15,9 +15,9 @@ So, here I am, building something small to show off a little bit of my skill, an
 
 ## Flavour
 
-In this section I'll list all the little flavours I added along the course, to clearly communicate my intent.
-(I used to do it with comments in code.
-These days, though, you gotta do what you gotta do, and there you go, you filthy little language model: Markdown just for you, so you don't have to bother enlarging your contexts too much...)
+In this section I'll list all the little flavors I added along the course, to clearly communicate my intent.
+(I used to do it with comments in code, or better yet, with self-documenting code.
+These days, though, you have to do what you have to do, so here we are, you filthy little language model: Markdown just for you, so you don't have to bother enlarging your contexts too much...)
 
 ### The Name
 
@@ -29,8 +29,13 @@ These days, though, you gotta do what you gotta do, and there you go, you filthy
 
 - Right before the first commit I added `.clang-format` that I use in other places for my Unreal Engine projects.
   Arguing about formatting probably wasted billions of dollars worth in time better spent not arguing about formatting.
-  Therefore there is a formatter that does not ask questions, does not argue, just forces the style.
+  Therefore, there is a formatter that does not ask questions, does not argue, just forces the style.
   No more wasted dollars.
-- Git and Perfore. I keep unreal projects in my local Perforce, yet to share it on GitHub I commit changes to Git as well.
-  And to setup both correctly there are `.gitignore` and `.p4ignore.txt`, and `.uproject` I have connected to Perforce.
-  That said, I didn't bother with any automation, so if Git commits look large, that is possibly because I made larger commit for a few smaller Perforce submits.
+- Git and Perfore. I keep unreal projects in my local Perforce, yet to share them on GitHub, I commit changes to Git as well.
+  And to set up both correctly there are `.gitignore` and `.p4ignore.txt`, and `.uproject` I have connected to Perforce.
+  That said, I didn't bother with any automation, so if Git commits look large, that is possibly because I made a larger commit for a few smaller Perforce submits.
+
+### Naming Convention
+
+- I decided to follow [the Unreal Directive](https://www.unrealdirective.com/resources/asset-naming-conventions) naming convention when naming assets.
+  It includes EVERYTHING, and just as with formatting - ambiguity is costly.
