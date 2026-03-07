@@ -12,6 +12,7 @@ ACurseCharacter::ACurseCharacter()
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	SpringArmComponent->SetupAttachment(RootComponent);
+	SpringArmComponent->bUsePawnControlRotation = true;
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
@@ -34,12 +35,24 @@ void ACurseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	auto* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	
 	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ACurseCharacter::Move);	
+	EnhancedInput->BindAction(Input_Look, ETriggerEvent::Triggered, this, &ACurseCharacter::Look);	
 }
 
-void ACurseCharacter::Move(const FInputActionValue& InValue)
+void ACurseCharacter::Move(const FInputActionValue& ActionValue)
 {
-	const auto InputVector = InValue.Get<FVector2D>();
-	const auto MoveDirection = FVector(InputVector, 0.f);
+	const auto InputVec = ActionValue.Get<FVector2D>();
 	
-	AddMovementInput(MoveDirection);
+	FRotator ControlRot = GetControlRotation();
+	ControlRot.Pitch = 0.f;
+	
+	AddMovementInput(ControlRot.Vector(), InputVec.X);
+	AddMovementInput(ControlRot.RotateVector(FVector::RightVector), InputVec.Y);
+}
+
+void ACurseCharacter::Look(const FInputActionInstance& ActionInstance)
+{
+	const auto InputVec = ActionInstance.GetValue().Get<FVector2D>();
+	
+	AddControllerPitchInput(InputVec.Y);
+	AddControllerYawInput(InputVec.X);
 }

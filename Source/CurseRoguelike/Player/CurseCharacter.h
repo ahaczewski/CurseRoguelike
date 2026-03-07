@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Character.h"
+#include "InputAction.h"
 #include "InputActionValue.h"
 
 #include "CurseCharacter.generated.h"
@@ -42,5 +43,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 private:
-	void Move(const FInputActionValue& InValue);
+	void Move(const FInputActionValue& ActionValue);
+	void Look(const FInputActionInstance& ActionInstance);
 };
