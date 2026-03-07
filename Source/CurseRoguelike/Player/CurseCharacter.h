@@ -14,7 +14,7 @@ class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
 
-UCLASS()
+UCLASS(Category = "Curse|Player")
 class CURSEROGUELIKE_API ACurseCharacter : public ACharacter
 {
 	GENERATED_BODY()
