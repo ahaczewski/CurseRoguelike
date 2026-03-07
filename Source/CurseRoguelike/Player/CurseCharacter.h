@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Character.h"
+#include "InputActionValue.h"
 
 #include "CurseCharacter.generated.h"
 
+class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
 
@@ -22,6 +24,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Input_Move;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Input_Look;
 
 public:
 	ACurseCharacter();
@@ -32,4 +40,7 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+private:
+	void Move(const FInputActionValue& InValue);
 };

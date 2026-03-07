@@ -3,6 +3,7 @@
 #include "CurseCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 ACurseCharacter::ACurseCharacter()
@@ -29,4 +30,16 @@ void ACurseCharacter::Tick(float DeltaTime)
 void ACurseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	auto* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	
+	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ACurseCharacter::Move);	
+}
+
+void ACurseCharacter::Move(const FInputActionValue& InValue)
+{
+	const auto InputVector = InValue.Get<FVector2D>();
+	const auto MoveDirection = FVector(InputVector, 0.f);
+	
+	AddMovementInput(MoveDirection);
 }
