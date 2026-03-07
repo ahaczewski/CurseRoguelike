@@ -10,6 +10,7 @@
 
 #include "CurseCharacter.generated.h"
 
+class UNiagaraSystem;
 class ACurseProjectileMagic;
 class UInputAction;
 class USpringArmComponent;
@@ -32,6 +33,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
 	float PrimaryAttackDelayTime = 0.2;
+
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	TObjectPtr<UNiagaraSystem> CastingEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	TObjectPtr<USoundBase> CastingSound;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;

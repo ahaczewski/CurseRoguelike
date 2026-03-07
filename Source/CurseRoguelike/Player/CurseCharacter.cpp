@@ -6,6 +6,8 @@
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "Projectiles/CurseProjectileMagic.h"
 
@@ -64,6 +66,17 @@ void ACurseCharacter::Look(const FInputActionInstance& ActionInstance)
 void ACurseCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(PrimaryAttackMontage);
+	
+	UNiagaraFunctionLibrary::SpawnSystemAttached(
+		CastingEffect,
+		GetMesh(),
+		ProjectileSpawnSocketName,
+		FVector::ZeroVector,
+		FRotator::ZeroRotator,
+		EAttachLocation::SnapToTarget,
+		true);
+	
+	UGameplayStatics::PlaySound2D(this, CastingSound);
 
 	FTimerHandle AttackTimerHandle;
 	auto AttackTimer = FTimerDelegate::CreateWeakLambda(
@@ -80,7 +93,7 @@ void ACurseCharacter::PrimaryAttack()
 
 			if (!IsValid(Projectile)) return;
 
-			GetCapsuleComponent()->IgnoreActorWhenMoving(Projectile, true);
+			MoveIgnoreActorAdd(Projectile);
 		});
 
 	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimer, PrimaryAttackDelayTime, false);

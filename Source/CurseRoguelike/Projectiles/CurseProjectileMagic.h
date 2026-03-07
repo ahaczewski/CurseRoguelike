@@ -19,14 +19,26 @@ class CURSEROGUELIKE_API ACurseProjectileMagic : public AActor
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float BaseDamage = 100.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	TSubclassOf<UDamageType> DamageType;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
 	TObjectPtr<UNiagaraSystem> ExplosionEffect;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	TObjectPtr<USoundBase> ExplosionSound;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USphereComponent> CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UNiagaraComponent> LoopedEffectComponent;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UAudioComponent> LoopedAudioComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;

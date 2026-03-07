@@ -2,6 +2,7 @@
 
 #include "CurseProjectileMagic.h"
 
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -21,11 +22,16 @@ ACurseProjectileMagic::ACurseProjectileMagic()
 
 	LoopedEffectComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LoopedEffectComp"));
 	LoopedEffectComponent->SetupAttachment(CollisionComponent);
+	
+	LoopedAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("LoopedAudioComp"));
+	LoopedAudioComponent->SetupAttachment(CollisionComponent);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	ProjectileMovementComponent->InitialSpeed = 2000.f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
+	
+	DamageType = UDamageType::StaticClass();
 }
 
 void ACurseProjectileMagic::PostInitializeComponents()
@@ -43,9 +49,11 @@ void ACurseProjectileMagic::OnHit(
 	FVector NormalImpulse,
 	const FHitResult& Hit)
 {
-	UGameplayStatics::ApplyDamage(OtherActor, 10.f, GetInstigatorController(), this, UDamageType::StaticClass());
+	UGameplayStatics::ApplyPointDamage(OtherActor, BaseDamage, GetActorRotation().Vector(), Hit, GetInstigatorController(), this, DamageType);
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation());
+	
+	UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());	
 
 	Destroy();
 }
