@@ -63,15 +63,25 @@ void ACurseCharacter::Look(const FInputActionInstance& ActionInstance)
 
 void ACurseCharacter::PrimaryAttack()
 {
-	FVector SpawnLocation = GetMesh()->GetSocketLocation(ProjectileSpawnSocketName);
-	FRotator SpawnRotation = GetControlRotation();
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = this;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	PlayAnimMontage(PrimaryAttackMontage);
 
-	auto* Projectile = GetWorld()->SpawnActor<ACurseProjectileMagic>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+	FTimerHandle AttackTimerHandle;
+	auto AttackTimer = FTimerDelegate::CreateWeakLambda(
+		this,
+		[this]()
+		{
+			FVector SpawnLocation = GetMesh()->GetSocketLocation(ProjectileSpawnSocketName);
+			FRotator SpawnRotation = GetControlRotation();
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Instigator = this;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	if (!IsValid(Projectile)) return;
-	
-	GetCapsuleComponent()->IgnoreActorWhenMoving(Projectile, true);
+			auto* Projectile = GetWorld()->SpawnActor<ACurseProjectileMagic>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+			if (!IsValid(Projectile)) return;
+
+			GetCapsuleComponent()->IgnoreActorWhenMoving(Projectile, true);
+		});
+
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimer, PrimaryAttackDelayTime, false);
 }

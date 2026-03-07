@@ -23,19 +23,25 @@ class CURSEROGUELIKE_API ACurseCharacter : public ACharacter
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
 	TSubclassOf<ACurseProjectileMagic> ProjectileClass;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
 	FName ProjectileSpawnSocketName = "Muzzle_01";
-	
+
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	TObjectPtr<UAnimMontage> PrimaryAttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	float PrimaryAttackDelayTime = 0.2;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Input_Move;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Input_Look;
 
@@ -51,7 +57,7 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	
+
 private:
 	void Move(const FInputActionValue& ActionValue);
 	void Look(const FInputActionInstance& ActionInstance);
