@@ -11,6 +11,8 @@ public class CurseRoguelike : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		
+		PrivateIncludePaths.AddRange(new string[] { "CurseRoguelike" });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

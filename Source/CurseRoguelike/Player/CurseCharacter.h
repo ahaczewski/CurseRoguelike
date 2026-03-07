@@ -10,6 +10,7 @@
 
 #include "CurseCharacter.generated.h"
 
+class ACurseProjectileMagic;
 class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
@@ -20,6 +21,12 @@ class CURSEROGUELIKE_API ACurseCharacter : public ACharacter
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	TSubclassOf<ACurseProjectileMagic> ProjectileClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "PrimaryAttack")
+	FName ProjectileSpawnSocketName = "Muzzle_01";
+	
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
 
@@ -31,6 +38,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> Input_Look;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> Input_PrimaryAttack;
 
 public:
 	ACurseCharacter();
@@ -45,4 +55,5 @@ public:
 private:
 	void Move(const FInputActionValue& ActionValue);
 	void Look(const FInputActionInstance& ActionInstance);
+	void PrimaryAttack();
 };

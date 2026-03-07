@@ -33,6 +33,7 @@ void ACurseProjectileMagic::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	CollisionComponent->OnComponentHit.AddDynamic(this, &ACurseProjectileMagic::OnHit);
+	CollisionComponent->IgnoreActorWhenMoving(GetInstigator(), true);
 }
 
 void ACurseProjectileMagic::OnHit(

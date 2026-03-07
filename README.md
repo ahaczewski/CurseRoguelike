@@ -49,3 +49,10 @@ These days, though, you have to do what you have to do, so here we are, you filt
 
 - All collision related constants are defined in `CurseCollision.h` and declared in `.cpp`.
   This will centralize all collision channels and profiles in one place, because they are centralized in the engine as well.
+
+### On the Use of `auto`
+
+- I use `auto` whenever the exact type name is repeated in the same line.
+  For example, `auto* MyActor = GetWorld()->SpawnActor<AActor>(...)` is fine, because the type of `MyActor` is already clear from the right-hand side of the assignment.
+  However, `auto MyInstigator = GetInstigator();` is not fine, because the type of `MyInstigator` is not clear from the right-hand side of the assignment.
+  I will also never revert to using `const auto&` as the default catch-all for all possible types without copying, and instead specify `[const] auto*` for pointers, `[const] auto&` for references, and so on.
