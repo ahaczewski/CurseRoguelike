@@ -36,6 +36,8 @@ void ACurseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ACurseCharacter::Move);
 	EnhancedInput->BindAction(Input_Look, ETriggerEvent::Triggered, this, &ACurseCharacter::Look);
+	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Started, this, &ACurseCharacter::Jump);
+	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Completed, this, &ACurseCharacter::StopJumping);
 	EnhancedInput->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ACurseCharacter::PrimaryAttack);
 }
 
