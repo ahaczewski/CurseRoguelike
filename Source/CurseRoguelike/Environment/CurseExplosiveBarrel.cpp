@@ -13,6 +13,7 @@ ACurseExplosiveBarrel::ACurseExplosiveBarrel()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	RootComponent = MeshComponent;
 	MeshComponent->SetSimulatePhysics(true);
+	MeshComponent->SetCollisionProfileName(UCollisionProfile::PhysicsActor_ProfileName);
 
 	ExplosionForceComponent = CreateDefaultSubobject<URadialForceComponent>(TEXT("ExplosionForceComp"));
 	ExplosionForceComponent->SetupAttachment(MeshComponent);
@@ -20,36 +21,47 @@ ACurseExplosiveBarrel::ACurseExplosiveBarrel()
 	ExplosionForceComponent->Radius = 500.f;
 	ExplosionForceComponent->Falloff = RIF_Linear;
 	ExplosionForceComponent->bAutoActivate = false;
-
-	LoopedBurningEffectComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LoopedBurningEffectComp"));
-	LoopedBurningEffectComponent->SetupAttachment(MeshComponent);
-	LoopedBurningEffectComponent->bAutoActivate = false;
-
-	LoopedBurningSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("LoopedBurningSoundComp"));
-	LoopedBurningSoundComponent->SetupAttachment(MeshComponent);
-	LoopedBurningSoundComponent->bAutoActivate = false;
+	ExplosionForceComponent->bIgnoreOwningActor = true;
 }
 
 float ACurseExplosiveBarrel::TakeDamage(float DamageAmount, const FDamageEvent& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (ActualDamage > 0)
+	if (ActualDamage > 0 && !bIsExploded)
 	{
 		// Start burning and explode after BurningDuration.
 		if (!bIsBurning)
 		{
 			bIsBurning = true;
 
-			LoopedBurningEffectComponent->ActivateSystem();
-			LoopedBurningSoundComponent->Activate();
+			BurningEffectComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+				BurningEffect,
+				ExplosionForceComponent,
+				NAME_None,
+				FVector::ZeroVector,
+				FRotator::ZeroRotator,
+				EAttachLocation::Type::SnapToTarget,
+				true);
+			BurningSoundComponent = UGameplayStatics::SpawnSoundAttached(
+				BurningSound,
+				ExplosionForceComponent,
+				NAME_None,
+				FVector::ZeroVector,
+				FRotator::ZeroRotator,
+				EAttachLocation::Type::SnapToTarget,
+				true);
 
 			GetWorldTimerManager().SetTimer(BurningTimerHandle, this, &ACurseExplosiveBarrel::Explode, BurningDuration, false);
 		}
 		// Explode immediately, invalidating explosion timer.
 		else
 		{
-			if (BurningTimerHandle.IsValid()) BurningTimerHandle.Invalidate();
+			if (BurningTimerHandle.IsValid())
+			{
+				GetWorldTimerManager().ClearTimer(BurningTimerHandle);
+			}
+			
 			Explode();
 		}
 	}
@@ -61,17 +73,19 @@ void ACurseExplosiveBarrel::Explode()
 {
 	ExplosionForceComponent->FireImpulse();
 
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, LoopedBurningEffectComponent->GetComponentLocation());
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ExplosionEffect, ExplosionForceComponent->GetComponentLocation());
 
-	UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, LoopedBurningSoundComponent->GetComponentLocation());
+	UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, ExplosionForceComponent->GetComponentLocation());
 
-	LoopedBurningEffectComponent->Deactivate();
-	LoopedBurningSoundComponent->Deactivate();
+	if (IsValid(BurningEffectComponent)) BurningEffectComponent->Deactivate();
+	if (IsValid(BurningSoundComponent)) BurningSoundComponent->Stop();
+
 	bIsBurning = false;
+	bIsExploded = true;
 
 	// Destroy();
-	MeshComponent->SetSimulatePhysics(false);
-	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	MeshComponent->SetHiddenInGame(true);
-	SetLifeSpan(1.f);
+	// MeshComponent->SetSimulatePhysics(false);
+	// MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// MeshComponent->SetHiddenInGame(true);
+	// SetLifeSpan(1.f);
 }

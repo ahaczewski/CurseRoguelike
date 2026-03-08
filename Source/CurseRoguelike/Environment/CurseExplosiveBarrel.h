@@ -17,26 +17,29 @@ class CURSEROGUELIKE_API ACurseExplosiveBarrel : public AActor
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	UPROPERTY(EditDefaultsOnly, Category = "Barrel")
 	float BurningDuration = 3.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	UPROPERTY(EditDefaultsOnly, Category = "Barrel")
+	TObjectPtr<UNiagaraSystem> BurningEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Barrel")
+	TObjectPtr<USoundBase> BurningSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Barrel")
 	TObjectPtr<UNiagaraSystem> ExplosionEffect;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	UPROPERTY(EditDefaultsOnly, Category = "Barrel")
 	TObjectPtr<USoundBase> ExplosionSound;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 
+	/**
+	 * NOTE: The position of this component is used to spawn all effects and sounds. 
+	 */
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<URadialForceComponent> ExplosionForceComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UNiagaraComponent> LoopedBurningEffectComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UAudioComponent> LoopedBurningSoundComponent;
 
 public:
 	ACurseExplosiveBarrel();
@@ -46,6 +49,14 @@ public:
 private:
 	void Explode();
 	
+	bool bIsExploded = false;
 	bool bIsBurning = false;
 	FTimerHandle BurningTimerHandle;
+
+	UPROPERTY()
+	TObjectPtr<UNiagaraComponent> BurningEffectComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAudioComponent> BurningSoundComponent;
+
 };
