@@ -40,11 +40,6 @@ These days, though, you have to do what you have to do, so here we are, you filt
 - I decided to follow [the Unreal Directive](https://www.unrealdirective.com/resources/asset-naming-conventions) naming convention when naming assets.
   It includes EVERYTHING, and just as with formatting - ambiguity is costly.
 
-### Name Class Categories
-
-- I started putting each class I created in a category under the "Curse" category, to easily locate them and differentiate them from the engine classes.
-- To make it unambiguous on how the category should be named, it is named "Curse|<class directory>" - no guessing on the category name.
-
 ### Collision-Related Constants
 
 - All collision related constants are defined in `CurseCollision.h` and declared in `.cpp`.

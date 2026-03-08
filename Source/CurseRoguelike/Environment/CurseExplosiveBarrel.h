@@ -11,7 +11,8 @@
 class URadialForceComponent;
 class UNiagaraComponent;
 class UNiagaraSystem;
-UCLASS(Abstract, Category = "Curse|Environment")
+
+UCLASS(Abstract)
 class CURSEROGUELIKE_API ACurseExplosiveBarrel : public AActor
 {
 	GENERATED_BODY()

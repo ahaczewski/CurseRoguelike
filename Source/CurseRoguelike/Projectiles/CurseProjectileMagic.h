@@ -13,7 +13,7 @@ class UNiagaraComponent;
 class UProjectileMovementComponent;
 class USphereComponent;
 
-UCLASS(Abstract, Category = "Curse|Projectiles")
+UCLASS(Abstract)
 class CURSEROGUELIKE_API ACurseProjectileMagic : public AActor
 {
 	GENERATED_BODY()
