@@ -8,11 +8,17 @@
 
 #include "CurseInteractionComponent.generated.h"
 
-
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CURSEROGUELIKE_API UCurseInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	float InteractionRadius = 450.f;
+
+	UPROPERTY(EditAnywhere, Category = "Interaction")
+	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
 
 public:
 	UCurseInteractionComponent();
@@ -22,4 +28,7 @@ public:
 
 protected:
 	TWeakObjectPtr<APlayerController> OwningPlayer;
+
+private:
+	const FOverlapResult* FindBestInteractable(const TArray<FOverlapResult>& Overlaps, const FVector& Origin, const FVector& LookDirection) const;
 };
