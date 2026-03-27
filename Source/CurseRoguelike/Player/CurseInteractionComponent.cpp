@@ -4,6 +4,8 @@
 
 #include "Engine/OverlapResult.h"
 
+#include "CurseInteractionInterface.h"
+
 UCurseInteractionComponent::UCurseInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -31,17 +33,16 @@ void UCurseInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 	GetWorld()->OverlapMultiByChannel(Overlaps, OriginVec, FQuat::Identity, TraceChannel, FCollisionShape::MakeSphere(InteractionRadius));
 
-#if UE_ENABLE_DEBUG_DRAWING
-	DrawDebugSphere(GetWorld(), OriginVec, InteractionRadius, 32, FColor::White);
-#endif
-
 	const FOverlapResult* BestOverlap = FindBestInteractable(Overlaps, OriginVec, PlayerController->GetControlRotation().Vector());
+	
+	Interactable = BestOverlap ? BestOverlap->GetActor() : nullptr;
 
 #if UE_ENABLE_DEBUG_DRAWING
 	if (BestOverlap)
 	{
 		DrawDebugBox(GetWorld(), BestOverlap->GetActor()->GetActorLocation(), FVector(60.f), FColor::Emerald);
 	}
+	DrawDebugSphere(GetWorld(), OriginVec, InteractionRadius, 32, FColor::White);
 #endif
 }
 
@@ -71,4 +72,15 @@ UCurseInteractionComponent::FindBestInteractable(const TArray<FOverlapResult>& O
 	}
 
 	return BestOverlap;
+}
+
+void UCurseInteractionComponent::Interact() const
+{
+	if (Interactable.IsValid())
+	{
+		if (auto* InteractionInterface = Cast<ICurseInteractionInterface>(Interactable.Get()))
+		{
+			InteractionInterface->Interact();
+		}
+	}
 }

@@ -25,9 +25,12 @@ public:
 
 	virtual void InitializeComponent() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	void Interact() const;
 
 protected:
 	TWeakObjectPtr<APlayerController> OwningPlayer;
+	TWeakObjectPtr<AActor> Interactable;
 
 private:
 	const FOverlapResult* FindBestInteractable(const TArray<FOverlapResult>& Overlaps, const FVector& Origin, const FVector& LookDirection) const;

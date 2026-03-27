@@ -47,4 +47,4 @@ tab_width = 4
 max_line_length = off
 
 # Copyright
-file_header_template =// Copyright Epic Games, Inc. All Rights Reserved.
+file_header_template =// Copyright 2026 Andrzej Haczewski.

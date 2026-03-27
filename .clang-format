@@ -104,9 +104,9 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex:           '^"Core[[:alnum:].]+\.h"$'
     Priority:        1
-  - Regex:           'Curse'
-    Priority:        3
   - Regex:           '\.generated\.h"$|UE_INLINE_GENERATED_CPP_BY_NAME'
     Priority:        999
+  - Regex:           'Curse'
+    Priority:        3
   - Regex:           '.*'
     Priority:        2
