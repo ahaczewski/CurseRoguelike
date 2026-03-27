@@ -6,6 +6,8 @@
 
 #include "Components/ActorComponent.h"
 
+#include "CurseCollision.h"
+
 #include "CurseInteractionComponent.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -18,7 +20,7 @@ protected:
 	float InteractionRadius = 450.f;
 
 	UPROPERTY(EditAnywhere, Category = "Interaction")
-	TEnumAsByte<ECollisionChannel> TraceChannel = ECC_Visibility;
+	TEnumAsByte<ECollisionChannel> TraceChannel = Curse::Collision::InteractionTraceChannel;
 
 public:
 	UCurseInteractionComponent();

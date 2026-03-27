@@ -8,5 +8,8 @@ namespace Curse::Collision
 {
 
 extern const FName ProjectileProfile;
+extern const FName InteractionProfile;
+
+extern const ECollisionChannel InteractionTraceChannel;
 
 }

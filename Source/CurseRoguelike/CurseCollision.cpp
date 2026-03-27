@@ -5,6 +5,9 @@
 namespace Curse::Collision
 {
 
-const FName ProjectileProfile(TEXT("Projectile"));
+const FName ProjectileProfile("Projectile");
+const FName InteractionProfile("Interaction");
+
+const ECollisionChannel InteractionTraceChannel = ECC_GameTraceChannel1;
 
 }

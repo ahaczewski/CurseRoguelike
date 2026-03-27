@@ -2,15 +2,20 @@
 
 #include "CurseItemChest.h"
 
+#include "CurseCollision.h"
+
 ACurseItemChest::ACurseItemChest()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	
 	BaseMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMeshComp"));
+	BaseMeshComponent->SetCollisionProfileName(Curse::Collision::InteractionProfile);
 	RootComponent = BaseMeshComponent;
 	
 	LidMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LidMeshComp"));
+	LidMeshComponent->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+	LidMeshComponent->SetGenerateOverlapEvents(false);
 	LidMeshComponent->SetupAttachment(BaseMeshComponent);
 }
 
