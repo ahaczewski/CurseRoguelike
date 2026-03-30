@@ -8,7 +8,7 @@
 #include "InputAction.h"
 #include "InputActionValue.h"
 
-#include "CurseCharacter.generated.h"
+#include "CursePlayerCharacter.generated.h"
 
 class UNiagaraSystem;
 class ACurseProjectileMagic;
@@ -17,7 +17,7 @@ class USpringArmComponent;
 class UCameraComponent;
 
 UCLASS()
-class CURSEROGUELIKE_API ACurseCharacter : public ACharacter
+class CURSEROGUELIKE_API ACursePlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -59,7 +59,7 @@ protected:
 	TObjectPtr<UInputAction> Input_PrimaryAttack;
 
 public:
-	ACurseCharacter();
+	ACursePlayerCharacter();
 
 protected:
 	virtual void BeginPlay() override;

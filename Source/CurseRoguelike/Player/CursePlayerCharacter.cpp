@@ -1,6 +1,6 @@
 // Copyright 2026 Andrzej Haczewski.
 
-#include "CurseCharacter.h"
+#include "CursePlayerCharacter.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -11,7 +11,7 @@
 
 #include "Projectiles/CurseProjectileMagic.h"
 
-ACurseCharacter::ACurseCharacter()
+ACursePlayerCharacter::ACursePlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -23,30 +23,30 @@ ACurseCharacter::ACurseCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
-void ACurseCharacter::BeginPlay()
+void ACursePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void ACurseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ACursePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	auto* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
-	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ACurseCharacter::Move);
-	EnhancedInput->BindAction(Input_Look, ETriggerEvent::Triggered, this, &ACurseCharacter::Look);
-	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Started, this, &ACurseCharacter::Jump);
-	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Completed, this, &ACurseCharacter::StopJumping);
-	EnhancedInput->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ACurseCharacter::PrimaryAttack);
+	EnhancedInput->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ACursePlayerCharacter::Move);
+	EnhancedInput->BindAction(Input_Look, ETriggerEvent::Triggered, this, &ACursePlayerCharacter::Look);
+	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Started, this, &ACursePlayerCharacter::Jump);
+	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Completed, this, &ACursePlayerCharacter::StopJumping);
+	EnhancedInput->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ACursePlayerCharacter::PrimaryAttack);
 }
 
-void ACurseCharacter::Tick(float DeltaTime)
+void ACursePlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void ACurseCharacter::Move(const FInputActionValue& ActionValue)
+void ACursePlayerCharacter::Move(const FInputActionValue& ActionValue)
 {
 	const auto InputVec = ActionValue.Get<FVector2D>();
 
@@ -57,7 +57,7 @@ void ACurseCharacter::Move(const FInputActionValue& ActionValue)
 	AddMovementInput(ControlRot.RotateVector(FVector::RightVector), InputVec.Y);
 }
 
-void ACurseCharacter::Look(const FInputActionInstance& ActionInstance)
+void ACursePlayerCharacter::Look(const FInputActionInstance& ActionInstance)
 {
 	const auto InputVec = ActionInstance.GetValue().Get<FVector2D>();
 
@@ -65,10 +65,10 @@ void ACurseCharacter::Look(const FInputActionInstance& ActionInstance)
 	AddControllerYawInput(InputVec.X);
 }
 
-void ACurseCharacter::PrimaryAttack()
+void ACursePlayerCharacter::PrimaryAttack()
 {
 	PlayAnimMontage(PrimaryAttackMontage);
-	
+
 	UNiagaraFunctionLibrary::SpawnSystemAttached(
 		CastingEffect,
 		GetMesh(),
@@ -77,7 +77,7 @@ void ACurseCharacter::PrimaryAttack()
 		FRotator::ZeroRotator,
 		EAttachLocation::SnapToTarget,
 		true);
-	
+
 	UGameplayStatics::PlaySound2D(this, CastingSound);
 
 	FTimerHandle AttackTimerHandle;
