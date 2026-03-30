@@ -3,7 +3,6 @@
 #include "CursePlayerCharacter.h"
 
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"

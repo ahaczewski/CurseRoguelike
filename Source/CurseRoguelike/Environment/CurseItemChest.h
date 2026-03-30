@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> LidMeshComponent;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ChestAnimationComplete();
+
 public:
 	ACurseItemChest();
 
