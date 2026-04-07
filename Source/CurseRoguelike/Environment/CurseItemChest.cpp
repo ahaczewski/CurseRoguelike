@@ -19,7 +19,7 @@ ACurseItemChest::ACurseItemChest()
 	LidMeshComponent->SetupAttachment(BaseMeshComponent);
 }
 
-void ACurseItemChest::Interact()
+void ACurseItemChest::Interact_Implementation()
 {
 	SetActorTickEnabled(true);
 }

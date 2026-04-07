@@ -22,5 +22,7 @@ class CURSEROGUELIKE_API ICurseInteractionInterface
 	GENERATED_BODY()
 
 public:
-	virtual void Interact() PURE_VIRTUAL(ICurseInteractionInterface::Interact, )
+	UFUNCTION(BlueprintNativeEvent)
+	void Interact();
+	virtual void Interact_Implementation() {}
 };

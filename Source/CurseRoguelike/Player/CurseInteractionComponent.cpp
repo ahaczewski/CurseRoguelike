@@ -34,7 +34,7 @@ void UCurseInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	GetWorld()->OverlapMultiByChannel(Overlaps, OriginVec, FQuat::Identity, TraceChannel, FCollisionShape::MakeSphere(InteractionRadius));
 
 	const FOverlapResult* BestOverlap = FindBestInteractable(Overlaps, OriginVec, PlayerController->GetControlRotation().Vector());
-	
+
 	Interactable = BestOverlap ? BestOverlap->GetActor() : nullptr;
 
 #if UE_ENABLE_DEBUG_DRAWING
@@ -76,11 +76,8 @@ UCurseInteractionComponent::FindBestInteractable(const TArray<FOverlapResult>& O
 
 void UCurseInteractionComponent::Interact() const
 {
-	if (Interactable.IsValid())
+	if (Interactable.IsValid() && Interactable->Implements<UCurseInteractionInterface>())
 	{
-		if (auto* InteractionInterface = Cast<ICurseInteractionInterface>(Interactable.Get()))
-		{
-			InteractionInterface->Interact();
-		}
+		ICurseInteractionInterface::Execute_Interact(Interactable.Get());
 	}
 }
