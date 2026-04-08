@@ -37,10 +37,13 @@ protected:
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 
 	/**
-	 * NOTE: The position of this component is used to spawn all effects and sounds. 
+	 * NOTE: The relative position of this component is used to spawn all effects and sounds. 
 	 */
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<URadialForceComponent> ExplosionForceComponent;
+
+	UFUNCTION(BlueprintCallable, Category = "Barrel")
+	void Explode();
 
 public:
 	ACurseExplosiveBarrel();
@@ -48,8 +51,6 @@ public:
 	virtual float TakeDamage(float DamageAmount, const FDamageEvent& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 private:
-	void Explode();
-	
 	bool bIsExploded = false;
 	bool bIsBurning = false;
 	FTimerHandle BurningTimerHandle;
@@ -59,5 +60,4 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<UAudioComponent> BurningSoundComponent;
-
 };

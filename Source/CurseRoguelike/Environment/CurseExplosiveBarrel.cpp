@@ -61,7 +61,7 @@ float ACurseExplosiveBarrel::TakeDamage(float DamageAmount, const FDamageEvent& 
 			{
 				GetWorldTimerManager().ClearTimer(BurningTimerHandle);
 			}
-			
+
 			Explode();
 		}
 	}
@@ -82,6 +82,9 @@ void ACurseExplosiveBarrel::Explode()
 
 	bIsBurning = false;
 	bIsExploded = true;
+
+	MeshComponent->AddImpulse(FVector::UpVector * 1000, NAME_None, true);
+	MeshComponent->AddAngularImpulseInDegrees(FVector::RightVector * 1000, NAME_None, true);
 
 	// Destroy();
 	// MeshComponent->SetSimulatePhysics(false);
