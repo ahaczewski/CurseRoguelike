@@ -8,7 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 
-#include "Projectiles/CurseProjectileMagic.h"
+#include "Projectiles/CurseProjectile.h"
 
 ACursePlayerCharacter::ACursePlayerCharacter()
 {
@@ -38,6 +38,8 @@ void ACursePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Started, this, &ACursePlayerCharacter::Jump);
 	EnhancedInput->BindAction(Input_Jump, ETriggerEvent::Completed, this, &ACursePlayerCharacter::StopJumping);
 	EnhancedInput->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ACursePlayerCharacter::PrimaryAttack);
+	EnhancedInput->BindAction(Input_SecondaryAttack, ETriggerEvent::Triggered, this, &ACursePlayerCharacter::SecondaryAttack);
+	EnhancedInput->BindAction(Input_PrimaryAbility, ETriggerEvent::Triggered, this, &ACursePlayerCharacter::PrimaryAbility);
 }
 
 void ACursePlayerCharacter::Tick(float DeltaTime)
@@ -66,10 +68,31 @@ void ACursePlayerCharacter::Look(const FInputActionInstance& ActionInstance)
 
 void ACursePlayerCharacter::PrimaryAttack()
 {
-	PlayAnimMontage(PrimaryAttackMontage);
+	TriggerAbility(PrimaryAttackMontage, CastingEffect, CastingSound, PrimaryAttackProjectileClass, PrimaryAttackDelayTime, ProjectileSpawnSocketName);
+}
+
+void ACursePlayerCharacter::SecondaryAttack()
+{
+	TriggerAbility(SecondaryAttackMontage, CastingEffect, CastingSound, SecondaryAttackProjectileClass, SecondaryAttackDelayTime, SecondaryAttackSpawnSocketName);
+}
+
+void ACursePlayerCharacter::PrimaryAbility()
+{
+	TriggerAbility(PrimaryAbilityMontage, CastingEffect, CastingSound, PrimaryAbilityProjectileClass, PrimaryAbilityDelayTime, PrimaryAbilitySocketName);
+}
+
+void ACursePlayerCharacter::TriggerAbility(
+	UAnimMontage* AbilityAnimMontage,
+	UNiagaraSystem* AbilityEffect,
+	USoundBase* AbilitySound,
+	UClass* ProjectileClass,
+	float DelayTime,
+	FName SpawnSocketName)
+{
+	PlayAnimMontage(AbilityAnimMontage);
 
 	UNiagaraFunctionLibrary::SpawnSystemAttached(
-		CastingEffect,
+		AbilityEffect,
 		GetMesh(),
 		ProjectileSpawnSocketName,
 		FVector::ZeroVector,
@@ -77,25 +100,25 @@ void ACursePlayerCharacter::PrimaryAttack()
 		EAttachLocation::SnapToTarget,
 		true);
 
-	UGameplayStatics::PlaySound2D(this, CastingSound);
+	UGameplayStatics::PlaySound2D(this, AbilitySound);
 
-	FTimerHandle AttackTimerHandle;
-	auto AttackTimer = FTimerDelegate::CreateWeakLambda(
+	FTimerHandle AbilityTimerHandle;
+	auto AbilityTimer = FTimerDelegate::CreateWeakLambda(
 		this,
-		[this]()
+		[this, ProjectileClass, SpawnSocketName]()
 		{
-			FVector SpawnLocation = GetMesh()->GetSocketLocation(ProjectileSpawnSocketName);
+			FVector SpawnLocation = GetMesh()->GetSocketLocation(SpawnSocketName);
 			FRotator SpawnRotation = GetControlRotation();
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Instigator = this;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-			auto* Projectile = GetWorld()->SpawnActor<ACurseProjectileMagic>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+			auto* Projectile = GetWorld()->SpawnActor<ACurseProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
 
 			if (!IsValid(Projectile)) return;
 
 			MoveIgnoreActorAdd(Projectile);
 		});
 
-	GetWorldTimerManager().SetTimer(AttackTimerHandle, AttackTimer, PrimaryAttackDelayTime, false);
+	GetWorldTimerManager().SetTimer(AbilityTimerHandle, AbilityTimer, DelayTime, false);
 }
