@@ -2,22 +2,12 @@
 
 #include "CurseProjectileMagic.h"
 
-#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Niagara/Public/NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 
 ACurseProjectileMagic::ACurseProjectileMagic()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
-	LoopedEffectComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LoopedEffectComp"));
-	LoopedEffectComponent->SetupAttachment(CollisionComponent);
-
-	LoopedAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("LoopedAudioComp"));
-	LoopedAudioComponent->SetupAttachment(CollisionComponent);
-
 	DamageType = UDamageType::StaticClass();
 }
 

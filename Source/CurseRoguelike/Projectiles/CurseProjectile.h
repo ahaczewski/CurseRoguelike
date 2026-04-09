@@ -8,6 +8,7 @@
 
 #include "CurseProjectile.generated.h"
 
+class UNiagaraComponent;
 class UProjectileMovementComponent;
 class USphereComponent;
 
@@ -22,6 +23,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UNiagaraComponent> LoopedEffectComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UAudioComponent> LoopedAudioComponent;
 
 public:
 	ACurseProjectile();

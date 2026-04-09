@@ -29,12 +29,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
 	TObjectPtr<USoundBase> ExplosionSound;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UNiagaraComponent> LoopedEffectComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UAudioComponent> LoopedAudioComponent;
-
 public:
 	ACurseProjectileMagic();
 
