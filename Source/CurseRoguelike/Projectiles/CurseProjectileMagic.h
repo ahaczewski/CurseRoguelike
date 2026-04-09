@@ -4,17 +4,15 @@
 
 #include "CoreMinimal.h"
 
-#include "GameFramework/Actor.h"
+#include "CurseProjectile.h"
 
 #include "CurseProjectileMagic.generated.h"
 
 class UNiagaraSystem;
 class UNiagaraComponent;
-class UProjectileMovementComponent;
-class USphereComponent;
 
 UCLASS(Abstract)
-class CURSEROGUELIKE_API ACurseProjectileMagic : public AActor
+class CURSEROGUELIKE_API ACurseProjectileMagic : public ACurseProjectile
 {
 	GENERATED_BODY()
 
@@ -24,24 +22,18 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	TSubclassOf<UDamageType> DamageType;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
 	TObjectPtr<UNiagaraSystem> ExplosionEffect;
-	
+
 	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
 	TObjectPtr<USoundBase> ExplosionSound;
-	
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<USphereComponent> CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UNiagaraComponent> LoopedEffectComponent;
-	
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UAudioComponent> LoopedAudioComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+	TObjectPtr<UAudioComponent> LoopedAudioComponent;
 
 public:
 	ACurseProjectileMagic();
