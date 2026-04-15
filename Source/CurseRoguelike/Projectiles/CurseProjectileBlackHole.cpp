@@ -3,19 +3,26 @@
 #include "CurseProjectileBlackhole.h"
 
 #include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+
+#include "CurseCollision.h"
 
 ACurseProjectileBlackHole::ACurseProjectileBlackHole()
 {
 	RadialForceComponent = CreateDefaultSubobject<URadialForceComponent>(TEXT("RadialForceComp"));
 	RadialForceComponent->SetupAttachment(CollisionComponent);
 	RadialForceComponent->bIgnoreOwningActor = true;
-	RadialForceComponent->ForceStrength = 1000000.f;
-	RadialForceComponent->Radius = 1000.f;
+	RadialForceComponent->ForceStrength = -300000.f;
+	RadialForceComponent->Radius = 750.f;
 	RadialForceComponent->Falloff = RIF_Linear;
+	RadialForceComponent->RemoveObjectTypeToAffect(UEngineTypes::ConvertToObjectType(ECC_Pawn));
+	RadialForceComponent->RemoveObjectTypeToAffect(UEngineTypes::ConvertToObjectType(ECC_Vehicle));
 
-	// TODO: set correct collision profile for collision component: overlap physical bodies / all dynamic, ignore pawn
-	// TODO: set correct channel/trace/object type for force component
+	CollisionComponent->SetCollisionProfileName(Curse::Collision::OverlapPhysicsBodyProfile);
+	CollisionComponent->SetSphereRadius(32.f);
+
+	ProjectileMovementComponent->InitialSpeed = 500.f;
 
 	InitialLifeSpan = 5.f;
 }
@@ -24,5 +31,19 @@ void ACurseProjectileBlackHole::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	// TODO: Add overlap handler to destroy actors pulled in by the black hole
+	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ACurseProjectileBlackHole::OnOverlapBegin);
+}
+
+void ACurseProjectileBlackHole::OnOverlapBegin(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	if (OtherComp->IsSimulatingPhysics())
+	{
+		OtherActor->Destroy();
+	}
 }

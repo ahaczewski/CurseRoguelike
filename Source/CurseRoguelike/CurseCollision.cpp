@@ -7,6 +7,7 @@ namespace Curse::Collision
 
 const FName ProjectileProfile("Projectile");
 const FName InteractionProfile("Interaction");
+const FName OverlapPhysicsBodyProfile("OverlapPhysicsBody");
 
 const ECollisionChannel InteractionTraceChannel = ECC_GameTraceChannel1;
 
