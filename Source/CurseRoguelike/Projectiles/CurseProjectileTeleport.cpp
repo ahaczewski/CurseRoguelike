@@ -2,8 +2,12 @@
 
 #include "CurseProjectileTeleport.h"
 
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
+#include "Constraint.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 
 ACurseProjectileTeleport::ACurseProjectileTeleport() {}
@@ -20,7 +24,7 @@ void ACurseProjectileTeleport::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ‘Explodes’ after 0.2 seconds. -- teleport instigator to the current projectile location.
+	GetWorldTimerManager().SetTimer(TeleportTimerHandle, this, &ACurseProjectileTeleport::OnTimeExpired, TeleportDelay);
 }
 
 void ACurseProjectileTeleport::OnHit(
@@ -29,27 +33,61 @@ void ACurseProjectileTeleport::OnHit(
 	UPrimitiveComponent* OtherComp,
 	FVector NormalImpulse,
 	const FHitResult& Hit)
-{}
-
-void ACurseProjectileTeleport::TeleportInstigator(const FTransform& Transform)
 {
+	GetWorldTimerManager().ClearTimer(TeleportTimerHandle);
+
+	TeleportInstigator(FTransform{GetActorQuat(), Hit.ImpactPoint});
+}
+
+void ACurseProjectileTeleport::OnTimeExpired()
+{
+	TeleportInstigator(GetActorTransform());
+}
+
+void ACurseProjectileTeleport::TeleportInstigator(const FTransform& Location)
+{
+	APawn* Instigator = GetInstigator();
+	if (!IsValid(Instigator))
+	{
+		return;
+	}
+
 	// TODO: Determine teleport location based on whether landscape or other object was hit. Landscapes do not support de-penetration on teleport, so we need to find a suitable location.
 	//   Do it like so:
 	//   - Overlap instigator at the hit location
 	//   - See the relative transform of the capsule vs the overlap results
 	//   - Correct the location
 	//   - Repeat until suitable location is found, or until max attempts reached
+	TeleportLocation = Location;
+
+	// Stop playing the loops.
+	LoopedEffectComponent->DeactivateImmediate();
+	LoopedAudioComponent->Stop();
 
 	// Play particle effect at point of detonation.
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, TeleportEffect, Transform.GetLocation(), Transform.GetRotation().Rotator());
+	UNiagaraComponent* ParticleEffect =
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, TeleportEffect, Location.GetLocation(), Location.GetRotation().Rotator());
 
-	// Make sure you ‘stop’ the projectile movement while you wait
+	// Play teleport sound at point of detonation.
+	UGameplayStatics::PlaySoundAtLocation(this, TeleportSound, Location.GetLocation());
+
+	// Stop the projectile movement while the effect plays.
 	ProjectileMovementComponent->StopMovementImmediately();
 
-	// Waits 0.2 seconds again (Timer) before Teleporting PlayerCharacter (aka the ‘Instigator’ of the projectile)
-	// - Lets the detonation effect play a little bit before we teleport so player can see it.
+	// Set a timer to handle teleportation after the effect finishes.
+	GetWorldTimerManager().SetTimer(TeleportTimerHandle, this, &ACurseProjectileTeleport::OnTeleportFinished, TeleportEffectTime);
+}
 
+void ACurseProjectileTeleport::OnTeleportFinished()
+{
+	APawn* Instigator = GetInstigator();
+	if (IsValid(Instigator))
+	{
+		Instigator->TeleportTo(TeleportLocation.GetLocation(), TeleportLocation.GetRotation().Rotator());
+	}
 	// After the wait:
 	// - Teleport the instigator
 	// - Destroy the projectile
+
+	Destroy();
 }

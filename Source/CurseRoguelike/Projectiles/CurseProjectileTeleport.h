@@ -19,6 +19,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
 	TObjectPtr<UNiagaraSystem> TeleportEffect;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
+	TObjectPtr<USoundBase> TeleportSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
+	float TeleportDelay = 0.2f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Teleport")
+	float TeleportEffectTime = 0.2f;
+
 public:
 	ACurseProjectileTeleport();
 
@@ -31,5 +40,10 @@ private:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	void OnTimeExpired();
 	void TeleportInstigator(const FTransform& Location);
+	void OnTeleportFinished();
+
+	FTransform TeleportLocation;
+	FTimerHandle TeleportTimerHandle;
 };
